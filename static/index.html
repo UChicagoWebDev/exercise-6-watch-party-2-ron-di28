@@ -61,11 +61,11 @@
       <h2>Welcome to Watch Party!</h2>
       <div class="alignedForm">
         <label for="username">Username: </label>
-        <input name="username" value="{{ username }}">
-        <button>update</button>
+        <input id="updateUsernameInput" name="username" value="{{ username }}">
+        <button id="updateUsername">update</button>
         <label for="password">Password: </label>
-        <input type="password" name="password" value="{{ password }}">
-        <button>update</button>
+        <input id="updatePasswordInput" type="password" name="password" value="{{ password }}">
+        <button id="updatePassword">update</button>
         <label for="repeatPassword">Repeat: </label>
         <input type="password" name="repeatPassword" value="{{ password }}">
         <error>Passwords don't match</error>
@@ -86,16 +86,16 @@
       <h3>Enter your username and password to log in:</h3>
       <div class="alignedForm login">
         <label for="username">Username</label>
-        <input name="username"></input>
-        <button>Login</button>
+        <input id="loginUsernameInput" name="username"></input>
+        <button id="loginButton">Login</button>
         <label for="password">Password</label>
-        <input type="password" name="password">
+        <input id="loginPasswordInput" type="password" name="password">
       </div>
       <div class="failed"> <!-- TODO: Hide me by default. Show only on failed login attempts -->
         <div class="message">
           Oops, that username and password don't match any of our users!
         </div>
-        <button>Create a new Account</button>
+        <button id="createNewAccount">Create a new Account</button>
       </div>
     </div>
   </div>
@@ -109,17 +109,17 @@
       <div class="displayRoomName"> <!-- TODO: Show me by default. Hide when user clicks the edit icon below -->
         <h3>
           Chatting in <strong>{{ room.name }}</strong>
-          <a><span class="material-symbols-outlined md-18">edit</span></a>
+          <a id="roomChangeIcon"><span class="material-symbols-outlined md-18">edit</span></a>
         </h3>
       </div>
       <div class="editRoomName"> <!-- TODO: Hide me by default. Show when user clicks the edit icon above -->
         <h3>
           Chatting in <input>
-          <button>Update</button>
+          <button id="updateRoomName">Update</button>
         </h3>
       </div>
       Invite users to this chat at:
-      <a>/rooms/{{ room_id }}</a>
+      <a id="roomInviteLink">/rooms/{{ room_id }}</a>
     </div>
     <div class="loginHeader">
       <div class="loggedIn">
@@ -136,8 +136,8 @@
       <div class="chat">
         <div class="comment_box">
           <label for="comment">What do you have to say?</label>
-          <textarea name="comment"></textarea>
-          <button type="submit" value="Post">Post</button>
+          <textarea id="comment" name="comment"></textarea>
+          <button id="postComment" type="submit" value="Post">Post</button>
         </div>
         <div class="messages"> <!-- TODO: Replace with the content returned by the API -->
           <message>
