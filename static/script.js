@@ -74,27 +74,44 @@ let showOnly = (element) => {
 let router = () => {
   CURRENT_ROOM = 0;
   let path = window.location.pathname;
-  console.log("Current path:", path);
   
   if(path == "/") {
-    // console.log("Root path matched");
-    console.log("root path" + CURRENT_ROOM)
     getRooms();
     showOnly(SPLASH);
   }
   else if(path == "/profile"){
-    showOnly(PROFILE);
-  }
+    if(isLoggedIn) {
+      showOnly(PROFILE);
+    }
+    else {
+      history.pushState({}, '', '/login');
+      sessionStorage.setItem('redirectToAfterLogin', path);
+      router();
+    }
+  } 
   else if(path.startsWith("/rooms/")) {
-    const roomId = path.split("/")[2]; 
-    console.log("path is" + path);
-    CURRENT_ROOM = roomId; // Set the current room ID
-    console.log(CURRENT_ROOM);
-    loadRoom(roomId); 
-    showOnly(ROOM);
+    if(isLoggedIn) {
+      const roomId = path.split("/")[2]; 
+      CURRENT_ROOM = roomId; 
+      console.log(CURRENT_ROOM);
+      loadRoom(roomId); 
+      showOnly(ROOM);
+    }
+    else {
+      history.pushState({}, '', '/login');
+      sessionStorage.setItem('redirectToAfterLogin', path);
+      router();
+    }
+    
   }
   else if(path == "/login") {
-    showOnly(LOGIN);
+    if(isLoggedIn) {
+      history.pushState({}, '', '/');
+      router();
+    }
+    else {
+      showOnly(LOGIN);
+    }
   }
   else if(path == "/signup") {
     showOnly(PROFILE);
@@ -263,6 +280,11 @@ async function attemptLogin(username, password) {
       sessionStorage.setItem('username', username);
       sessionStorage.setItem('password', password);
       isLoggedIn = true;
+      const redirectTo = sessionStorage.getItem('redirectToAfterLogin') || '/';
+      sessionStorage.removeItem('redirectToAfterLogin');
+      history.pushState({}, '', redirectTo);
+      loginStateUpdateUI();
+      router();
       // console.log('Login successful:', data);
     } else {
       console.error(`Login failed with status: ${response.status}`);
@@ -547,9 +569,8 @@ function startMessagePolling() {
     // If we're not in a room, don't query for messages
     if (CURRENT_ROOM == 0) return;
 
-    // Call loadRoomMessages with the current room ID
     loadRoomMessages(CURRENT_ROOM);
-  }, 5000); // Adjusted to 5 seconds for example
+  }, 500); 
 }
 
 
